@@ -57,6 +57,33 @@ return [[return {
                 end
             end
         },
+        _getDistance = {
+            "private function car:_getDistance(position)",
+            function(self, position)
+                local car = self.entity
+
+                return math.sqrt((car.position.x - position.x)^2 + (car.position.y - position.y)^2)
+            end
+        },
+        _hasItem = {
+            "private function car:_hasItem(name...)",
+            function(self, ...)
+                local car = self.entity
+
+                local inventory = car.grid
+                if inventory == nil then
+                    return false
+                else
+                    inventory = inventory.get_contents()
+                end
+                for i, name in pairs({...}) do
+                    if inventory[name] and inventory[name] > 0 then
+                        return true
+                    end
+                end
+                return false
+            end
+        },
         hasPassenger = {
             "car.hasPassenger() - Return true if a player is in the car",
             function(self)
@@ -94,10 +121,7 @@ return [[return {
             function(self, position)
                 local car = self.entity
 
-                position.x = math.floor(position.x + 0.5)
-                position.y = math.floor(position.y + 0.5)
-
-                if math.abs(car.position.x - position.x) > 20 or math.abs(car.position.y - position.y) > 20 then
+                if self:_getDistance(position) > 20 then
                     return nil, nil
                 end
 
@@ -129,6 +153,65 @@ return [[return {
                 if inventory ~= nil then
                     return inventory.get_contents()
                 end
+            end
+        },
+        trafficInformation = {
+            "car.trafficInformation() - Scan trafic in a radius of 20 tiles, return entities information",
+            function(self)
+                local player = self.player
+                local car = self.entity
+                local position = car.position
+                local result = {}
+                local area = {
+                    left_top = {
+                        x = position.x - 20,
+                        y = position.y - 20
+                    },
+                    right_bottom = {
+                        x = position.x + 20,
+                        y = position.y + 20
+                    }
+                }
+
+                local entities = car.surface.find_entities_filtered({
+                    area = area,
+                    type = "player",
+                    force = player.force
+                })
+                for index, entity in pairs(entities) do
+                    local speed = 0
+                    if entity.player.walking_state.walking then
+                        speed = 10
+                    end
+                    table.insert(result, {
+                        type = entity.type,
+                        name = entity.player.name,
+                        position = entity.position,
+                        distance = self._getDistance(entity.position),
+                        orientation = entity.orientation,
+                        speed = speed
+                    })
+                end
+
+                entities = car.surface.find_entities_filtered({
+                    area = area,
+                    type = "car",
+                    force = player.force
+                })
+                for index, entity in pairs(entities) do
+                    if entity ~= car and self._hasItem({entity = entity}, "onboard-computer-equipment", "onboard-military-computer-equipment") then
+                        table.insert(result, {
+                            type = entity.type,
+                            name = entity.name,
+                            position = entity.position,
+                            distance = self._getDistance(entity.position),
+                            orientation = entity.orientation,
+                            speed = self.getSpeed({entity = entity})
+                        })
+                    end
+                end
+
+                return result
             end
         },
         startEngine = {
