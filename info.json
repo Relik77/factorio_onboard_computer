@@ -1,0 +1,11 @@
+{
+    "name": "onboard_computer",
+    "version": "0.1.0",
+    "title": "Onboard Computer",
+    "author": "Relik",
+    "contact": "",
+    "homepage": "",
+    "factorio_version": "0.15",
+    "dependencies": ["base >= 0.15", "computer_core >= 1.0.0", "? VehicleGrid >= 0.1.2"],
+    "description": "Add a board computer to your cars and write a Lua program to give them an AI"
+}
