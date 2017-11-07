@@ -120,6 +120,17 @@ return [[return {
                 end
             end
         },
+        getCargo = {
+            "car.getCargo() - Returns the contents of the car",
+            function(self)
+                local car = self.entity
+                local inventory = car.get_inventory(defines.inventory.car_trunk)
+
+                if inventory ~= nil then
+                    return inventory.get_contents()
+                end
+            end
+        },
         startEngine = {
             "car.startEngine() - Starts the car engine",
             function(self)
@@ -183,8 +194,7 @@ return [[return {
             function(self)
                 self:_setDirection(defines.riding.direction.straight)
             end
-        },
-
+        }
     }
 }]]
 --}
