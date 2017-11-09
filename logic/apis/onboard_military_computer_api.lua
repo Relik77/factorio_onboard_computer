@@ -24,13 +24,13 @@ return [[return {
         getHealth = {
             "car.getHealth() - Return the health of the car",
             function(self)
-                return self.entity.health
+                return self.__entity.health
             end
         },
         getAmmo = {
             "car.getAmmo() - Returns the number of ammo remaining",
             function(self)
-                local car = self.entity
+                local car = self.__entity
                 local inventory = car.get_inventory(defines.inventory.car_ammo)
 
                 if inventory ~= nil then
@@ -41,7 +41,7 @@ return [[return {
         selectWeapon = {
             "car.selectWeapon(index) - Select a car weapon",
             function(self, index)
-                local car = self.entity
+                local car = self.__entity
 
                 if car.passenger and type(index) == "number" then
                     car.passenger.selected_gun_index = index
@@ -51,7 +51,7 @@ return [[return {
         shootOnPosition = {
             "car.shootOnPosition(position)",
             function(self, position)
-                local car = self.entity
+                local car = self.__entity
 
                 if car.passenger then
                     car.passenger.shooting_state = {

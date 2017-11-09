@@ -36,7 +36,7 @@ return [[return {
         _setDirection = {
             "private function car:_setDirection(direction)",
             function(self, direction)
-                local car = self.entity
+                local car = self.__entity
                 if car.passenger then
                     car.passenger.riding_state = {
                         acceleration = defines.riding.acceleration.nothing,
@@ -48,7 +48,7 @@ return [[return {
         _setAcceleration = {
             "private function car:_setAcceleration(acceleration)",
             function(self, acceleration)
-                local car = self.entity
+                local car = self.__entity
                 if car.passenger then
                     car.passenger.riding_state = {
                         acceleration = acceleration,
@@ -60,7 +60,7 @@ return [[return {
         _getDistance = {
             "private function car:_getDistance(position)",
             function(self, position)
-                local car = self.entity
+                local car = self.__entity
 
                 return math.sqrt((car.position.x - position.x)^2 + (car.position.y - position.y)^2)
             end
@@ -68,7 +68,7 @@ return [[return {
         _hasItem = {
             "private function car:_hasItem(name...)",
             function(self, ...)
-                local car = self.entity
+                local car = self.__entity
 
                 local inventory = car.grid
                 if inventory == nil then
@@ -87,7 +87,7 @@ return [[return {
         hasPassenger = {
             "car.hasPassenger() - Return true if a player is in the car",
             function(self)
-                local car = self.entity
+                local car = self.__entity
 
                 return car.passenger and not self._driverIsBot
             end
@@ -95,7 +95,7 @@ return [[return {
         getPosition = {
             "car.getPosition() - Returns the current position of the car",
             function(self)
-                local car = self.entity
+                local car = self.__entity
 
                 return car.position
             end
@@ -103,7 +103,7 @@ return [[return {
         getSpeed = {
             "car.getSpeed() - Return the speed of the car in km/h",
             function(self)
-                local car = self.entity
+                local car = self.__entity
 
                 return (car.speed * 60 * 60 * 60) / 1000
             end
@@ -111,7 +111,7 @@ return [[return {
         getOrientation = {
             "car.getOrientation() - Return the orientation of the car",
             function(self)
-                local car = self.entity
+                local car = self.__entity
 
                 return car.orientation
             end
@@ -119,7 +119,7 @@ return [[return {
         scanSurface = {
             "car.scanSurface(position) - Scan a position in a radius of 20 tiles, return true or false if the car will collides at and return the tile name",
             function(self, position)
-                local car = self.entity
+                local car = self.__entity
 
                 if self:_getDistance(position) > 20 then
                     return nil, nil
@@ -136,7 +136,7 @@ return [[return {
         getFuel = {
             "car.getFuel() - Returns the fuel in the tank of the car",
             function(self)
-                local car = self.entity
+                local car = self.__entity
                 local inventory = car.get_inventory(defines.inventory.fuel)
 
                 if inventory ~= nil then
@@ -147,7 +147,7 @@ return [[return {
         getCargo = {
             "car.getCargo() - Returns the contents of the car",
             function(self)
-                local car = self.entity
+                local car = self.__entity
                 local inventory = car.get_inventory(defines.inventory.car_trunk)
 
                 if inventory ~= nil then
@@ -158,8 +158,8 @@ return [[return {
         trafficInformation = {
             "car.trafficInformation() - Scan trafic in a radius of 20 tiles, return entities information",
             function(self)
-                local player = self.player
-                local car = self.entity
+                local player = self.__player
+                local car = self.__entity
                 local position = car.position
                 local result = {}
                 local area = {
@@ -214,11 +214,21 @@ return [[return {
                 return result
             end
         },
+        getWaypoint = {
+            "car.getWaypoint(name) - Find a waypoint by its name, and return its position",
+            function(self, name)
+                local waypoint = self.__getWaypoint(name)
+                if waypoint then
+                    return waypoint.position
+                end
+                return nil
+            end
+        },
         startEngine = {
             "car.startEngine() - Starts the car engine",
             function(self)
-                local player = self.player
-                local car = self.entity
+                local player = self.__player
+                local car = self.__entity
 
                 if not car.passenger then
                     self._driverIsBot = true
@@ -233,7 +243,7 @@ return [[return {
         stopEngine = {
             "car.stopEngine() - Stop the car engine",
             function(self)
-                local car = self.entity
+                local car = self.__entity
 
                 self:brake()
                 if self._driverIsBot and car.passenger and car.passenger.valid then
