@@ -2,6 +2,7 @@ data:extend({
     {
         type = "battery-equipment",
         name = "onboard-military-computer-equipment",
+        icon_size = 32,
         sprite =
         {
             filename = "__onboard_computer__/graphics/icons/onboard-military-computer-equipment.png",

@@ -37,8 +37,9 @@ return [[return {
             "private function car:_setDirection(direction)",
             function(self, direction)
                 local car = self.__entity
-                if car.passenger then
-                    car.passenger.riding_state = {
+                local driver = car.get_driver()
+                if driver then
+                    driver.riding_state = {
                         acceleration = defines.riding.acceleration.nothing,
                         direction = direction
                     }
@@ -49,10 +50,11 @@ return [[return {
             "private function car:_setAcceleration(acceleration)",
             function(self, acceleration)
                 local car = self.__entity
-                if car.passenger then
-                    car.passenger.riding_state = {
+                local driver = car.get_driver()
+                if driver then
+                    driver.riding_state = {
                         acceleration = acceleration,
-                        direction = car.passenger.riding_state.direction
+                        direction = driver.riding_state.direction
                     }
                 end
             end
@@ -84,12 +86,22 @@ return [[return {
                 return false
             end
         },
-        hasPassenger = {
-            "car.hasPassenger() - Return true if a player is in the car",
+        hasDriver = {
+            "car.hasDriver() - Return true if a player is in the car (driver)",
             function(self)
                 local car = self.__entity
+                local driver = car.get_driver()
 
-                return car.passenger and not self._driverIsBot
+                return driver and not self._driverIsBot
+            end
+        },
+        hasPassenger = {
+            "car.hasPassenger() - Return true if a player is in the car (passenger)",
+            function(self)
+                local car = self.__entity
+                local passenger = car.get_passenger()
+
+                return not not passenger
             end
         },
         getPosition = {
@@ -229,14 +241,18 @@ return [[return {
             function(self)
                 local player = self.__player
                 local car = self.__entity
+                local driver = car.get_driver()
 
-                if not car.passenger then
+                if not driver then
                     self._driverIsBot = true
-                    car.passenger = car.surface.create_entity({
+                    car.set_driver(car.surface.create_entity({
                         name = "player",
                         force = player.force,
-                        position = car.position
-                    })
+                        position = car.position,
+                        source = player.character,
+                        fast_replace = true,
+                        player = player
+                    }))
                 end
             end
         },
@@ -244,10 +260,11 @@ return [[return {
             "car.stopEngine() - Stop the car engine",
             function(self)
                 local car = self.__entity
+                local driver = car.get_driver()
 
                 self:brake()
-                if self._driverIsBot and car.passenger and car.passenger.valid then
-                    car.passenger.destroy()
+                if self._driverIsBot and driver and driver.valid then
+                    driver.destroy()
                     self._driverIsBot = false
                 end
             end
