@@ -1,7 +1,7 @@
 data:extend({
     {
         type = "bool-setting",
-        name = "vehicle-grid",
+        name = "onboard-vehicle-grid",
         order = "za",
         setting_type = "startup",
         default_value = true,

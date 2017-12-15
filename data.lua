@@ -14,7 +14,7 @@ require ("prototypes.technologies.onboard_military_computer_technology")
 require ("prototypes.equipment.onboard_computer_equipment")
 require ("prototypes.equipment.onboard_military_computer_equipment")
 
-if settings.startup["vehicle-grid"] then
+if settings.startup["onboard-vehicle-grid"] then
     data:extend({
         {
             type = "equipment-grid",

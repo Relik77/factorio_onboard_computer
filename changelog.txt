@@ -1,0 +1,23 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+
+  Changes:
+    - Support Factorio 0.16 native changelog features.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 14. 12. 2017
+  Major Features:
+    - Add Military Computer: provides functions to detect and engage your enemies
+  Changes:
+    - Add default car grid (You can deactivate it from the mod settings)
+    - Update for Factorio 0.16
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 09. 11. 2017
+  Features:
+    - Add API methods: car.getCargo(), car.trafficInformation() and car.getWaypoint(name)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 05. 11. 2017
+  Changes:
+    - Initial release
