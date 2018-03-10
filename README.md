@@ -1,13 +1,12 @@
-OnBoard Computer
-================
+Factorio: OnBoard Computer
+==========================
+
+`factorio_onboard_computer` is a Factorio mod that provides add a board computer to your cars and write a Lua program to give them an AI.
 
 Dependencies:
+-------------
 - [computer_core](https://mods.factorio.com/mods/Relik77/computer_core)
 - Any mod that adds an inventory grid to vehicles (eg: [Vehicle Grid](https://mods.factorio.com/mods/Optera/VehicleGrid), [VehicleGrids](https://mods.factorio.com/mods/RubenGass/VehicleGrids), [5Dim's mod - Vehicle](https://mods.factorio.com/mods/McGuten/5dim_vehicle)...)
-
-Add a board computer to your cars and write a Lua program to give them an AI
-
-Forum: [https://forums.factorio.com/viewtopic.php?f=93&t=53985](https://forums.factorio.com/viewtopic.php?f=93&t=53985)
 
 OnBoard APIs
 ------------
