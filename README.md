@@ -34,10 +34,3 @@ TODO
 ====
 What should be done in the future:
 - Military computer : provides functions to detect and engage your enemies
-
-Change Log
-==========
-#### v0.2.0
-- Add API methods: car.getCargo(), car.trafficInformation() and car.getWaypoint(name)
-#### v0.1.0
-- Initial release
